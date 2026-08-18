@@ -1,0 +1,1 @@
+.venv/\n__pycache__/\n*.egg-info/\n.pytest_cache/\n.coverage\nhtmlcov/\n.kgcontext/

@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kgcontext"
+version = "0.1.0"
+description = "Knowledge Graph middleware for LLM document analysis"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [{name = "Frank"}]
+dependencies = [
+    "networkx>=3.2",
+    "pymupdf>=1.24",
+    "python-docx>=1.1",
+    "lancedb>=0.6",
+    "openai>=1.30",
+    "pydantic>=2.7",
+    "tiktoken>=0.7",
+    "markdown>=3.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-randomly>=3.15",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "hypothesis>=6.100",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kgcontext"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.coverage.run]
+source = ["src/kgcontext"]
+
+[tool.coverage.report]
+show_missing = true
