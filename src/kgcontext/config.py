@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -17,7 +18,7 @@ class KGConfig:
     include_unsupported: bool = False
     include_conflicts: bool = True
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         return {
             "max_context_tokens": self.max_context_tokens,
             "llm_provider": self.llm_provider,
@@ -31,15 +32,15 @@ class KGConfig:
         }
 
     @classmethod
-    def from_dict(cls, d: dict) -> KGConfig:
+    def from_dict(cls, d: dict[str, Any]) -> KGConfig:
         return cls(
-            max_context_tokens=d.get("max_context_tokens", 4000),
-            llm_provider=d.get("llm_provider", "openai"),
+            max_context_tokens=int(d.get("max_context_tokens", 4000)),
+            llm_provider=str(d.get("llm_provider", "openai")),
             llm_base_url=d.get("llm_base_url"),
-            llm_model=d.get("llm_model", "gpt-4o-mini"),
+            llm_model=str(d.get("llm_model", "gpt-4o-mini")),
             llm_api_key=d.get("llm_api_key"),
             vector_store=d.get("vector_store", "lancedb"),
-            storage_path=d.get("storage_path", "./.kgcontext"),
-            include_unsupported=d.get("include_unsupported", False),
-            include_conflicts=d.get("include_conflicts", True),
+            storage_path=str(d.get("storage_path", "./.kgcontext")),
+            include_unsupported=bool(d.get("include_unsupported", False)),
+            include_conflicts=bool(d.get("include_conflicts", True)),
         )

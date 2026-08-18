@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
-
-from kgcontext import KnowledgeGraph, Answer, Document
+from kgcontext import Answer, Document, KnowledgeGraph
 
 
 class TestQuery:
@@ -18,7 +16,7 @@ class TestQuery:
         kg_with_llm.ingest([str(tmp_txt)])
         answer = kg_with_llm.query("What are the requirements?")
         assert len(answer.provenance) > 0
-        for fact_id, prov in answer.provenance.items():
+        for _fact_id, prov in answer.provenance.items():
             assert "document_path" in prov
             assert "evidence_excerpt" in prov
 

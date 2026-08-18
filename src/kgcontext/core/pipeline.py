@@ -13,16 +13,15 @@ from ..types import (
     EdgeType,
     Evidence,
     Fact,
-    Node,
     NodeType,
     Requirement,
     ValidationReport,
 )
-from .context import Context, ContextBuilder
-from .extractor import ExtractionError, LLMExtractor
+from .context import ContextBuilder
+from .extractor import LLMExtractor
 from .graph import KnowledgeGraphInternal
-from .llm import LLMClient, OpenAIClient
-from .parsers import UnsupportedFormatError, parse_file
+from .llm import LLMClient
+from .parsers import parse_file
 from .retrieval import LanceDBStore
 from .validator import GraphValidator
 
@@ -184,7 +183,10 @@ class KnowledgeGraph:
     @property
     def requirements(self) -> list[Requirement]:
         nodes = self._graph.get_nodes_by_type(NodeType.REQUIREMENT)
-        return [Requirement(id=n["id"], content=n.get("content", ""), metadata=n.get("metadata", {})) for n in nodes]
+        return [
+            Requirement(id=n["id"], content=n.get("content", ""), metadata=n.get("metadata", {}))
+            for n in nodes
+        ]
 
     @property
     def documents(self) -> list[Document]:
@@ -203,14 +205,19 @@ class KnowledgeGraph:
     @property
     def conflicts(self) -> list[Conflict]:
         nodes = self._graph.get_nodes_by_type(NodeType.CONFLICT)
-        return [Conflict(id=n["id"], content=n.get("content", ""), metadata=n.get("metadata", {})) for n in nodes]
+        return [
+            Conflict(id=n["id"], content=n.get("content", ""), metadata=n.get("metadata", {}))
+            for n in nodes
+        ]
 
     def get_evidence_for_fact(self, fact_id: str) -> list[Evidence]:
         neighbor_ids = self._graph.get_neighbors(fact_id, EdgeType.SUPPORTS, direction="in")
         result: list[Evidence] = []
         for nid in neighbor_ids:
             data = self._graph.get_node(nid)
-            result.append(Evidence(id=nid, content=data.get("content", ""), metadata=data.get("metadata", {})))
+            result.append(
+                Evidence(id=nid, content=data.get("content", ""), metadata=data.get("metadata", {}))
+            )
         return result
 
     def get_facts_for_requirement(self, req_id: str) -> list[Fact]:

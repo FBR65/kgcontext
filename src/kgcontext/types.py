@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
 
-class NodeType(str, Enum):
+class NodeType(StrEnum):
     DOCUMENT = "document"
     FACT = "fact"
     EVIDENCE = "evidence"
@@ -18,7 +18,7 @@ class NodeType(str, Enum):
     CONFLICT = "conflict"
 
 
-class EdgeType(str, Enum):
+class EdgeType(StrEnum):
     EXTRACTED_FROM = "extracted_from"
     SUPPORTS = "supports"
     SATISFIED_BY = "satisfied_by"
@@ -32,7 +32,7 @@ class Node(BaseModel):
     content: str = ""
     metadata: dict[str, Any] = Field(default_factory=dict)
     created_at: str = Field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
 
     def __eq__(self, other: object) -> bool:

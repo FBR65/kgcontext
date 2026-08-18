@@ -28,8 +28,8 @@ class LanceDBStore:
 
     def __init__(self, uri: str = "./.kgcontext/lancedb") -> None:
         self._uri = uri
-        self._db = None
-        self._table = None
+        self._db: Any = None
+        self._table: Any = None
 
     def _ensure_db(self) -> None:
         if self._db is None:
@@ -39,7 +39,7 @@ class LanceDBStore:
             try:
                 self._table = self._db.open_table("documents")
             except Exception:
-                self._table = None
+                pass
 
     def index_documents(self, documents: list[Document]) -> None:
         """Embed and store documents in LanceDB."""
@@ -76,13 +76,12 @@ class LanceDBStore:
                 }
             )
 
-        import lancedb
 
         if self._table is None:
-            self._table = self._db.create_table("documents", data=data)  # type: ignore[union-attr]
+            self._table = self._db.create_table("documents", data=data)
         else:
             for row in data:
-                self._table.add([row])  # type: ignore[union-attr]
+                self._table.add([row])
 
     def search(self, query: str, k: int = 5) -> list[SearchResult]:
         """Search for similar documents."""
@@ -94,7 +93,7 @@ class LanceDBStore:
 
         # Build query vector from same vocab
         # Re-derive vocab from stored data
-        all_data = list(self._table.to_arrow().to_pylist())  # type: ignore[union-attr]
+        all_data = list(self._table.to_arrow().to_pylist())
         if not all_data:
             return []
 

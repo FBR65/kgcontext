@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from kgcontext import KnowledgeGraph, NodeType, EdgeType, Fact, Evidence, Requirement
+from kgcontext import EdgeType, Evidence, KnowledgeGraph
 
 
 class TestNodeManagement:
@@ -33,7 +33,9 @@ class TestNodeManagement:
         ev_id = empty_kg.add_evidence("excerpt", fact_id, doc_id)
 
         # Evidence supports fact
-        supports = empty_kg._internal_graph.get_neighbors(fact_id, EdgeType.SUPPORTS, direction="in")
+        supports = empty_kg._internal_graph.get_neighbors(
+            fact_id, EdgeType.SUPPORTS, direction="in"
+        )
         assert ev_id in supports
         # Evidence extracted from document
         extracted = empty_kg._internal_graph.get_neighbors(ev_id, EdgeType.EXTRACTED_FROM)
@@ -56,7 +58,7 @@ class TestNodeManagement:
         doc = Document(content="test", source_path="/t.txt", doc_type="txt")
         doc_id = empty_kg._internal_graph.add_node(doc)
         fact_id = empty_kg.add_fact("fact with conflict", doc_id)
-        conflict_id = empty_kg.add_conflict("contradicts other source", fact_id)
+        empty_kg.add_conflict("contradicts other source", fact_id)
 
         conflicts = empty_kg.get_conflicts(fact_id)
         assert len(conflicts) == 1
@@ -103,7 +105,6 @@ class TestTraversal:
         assert result.source_path == "/t.txt"
 
     def test_get_source_document_no_document(self, empty_kg: KnowledgeGraph) -> None:
-        from kgcontext import Evidence
         ev = Evidence(content="orphan evidence")
         ev_id = empty_kg._internal_graph.add_node(ev)
         result = empty_kg.get_source_document(ev_id)
@@ -117,14 +118,14 @@ class TestTraversal:
         fact_with_ev = empty_kg.add_fact("supported fact", doc_id)
         empty_kg.add_evidence("ev", fact_with_ev, doc_id)
 
-        fact_without_ev = empty_kg.add_fact("unsupported fact", doc_id)
+        empty_kg.add_fact("unsupported fact", doc_id)
 
         unsupported = empty_kg.get_unsupported_facts()
         assert len(unsupported) == 1
         assert unsupported[0].content == "unsupported fact"
 
     def test_get_incomplete_requirements(self, empty_kg: KnowledgeGraph) -> None:
-        req1 = empty_kg.add_requirement("req1")
+        empty_kg.add_requirement("req1")
         req2 = empty_kg.add_requirement("req2")
 
         from kgcontext import Document
@@ -146,8 +147,8 @@ class TestTraversal:
         doc = Document(content="test", source_path="/t.txt", doc_type="txt")
         doc_id = empty_kg._internal_graph.add_node(doc)
 
-        f1 = empty_kg.add_fact("fact1", doc_id)
-        f2 = empty_kg.add_fact("fact2", doc_id)
-        f3 = empty_kg.add_fact("fact3", doc_id)
+        empty_kg.add_fact("fact1", doc_id)
+        empty_kg.add_fact("fact2", doc_id)
+        empty_kg.add_fact("fact3", doc_id)
 
         assert len(empty_kg.facts) == 3

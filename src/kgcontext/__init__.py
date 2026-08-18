@@ -1,9 +1,9 @@
 """kgcontext — Knowledge Graph middleware for LLM document analysis."""
 
 from .config import KGConfig
+from .core.extractor import ExtractionError
 from .core.llm import LLMClient, MockLLMClient, OpenAIClient
 from .core.parsers import UnsupportedFormatError, parse_file
-from .core.extractor import ExtractionError
 from .core.pipeline import KnowledgeGraph
 from .persistence import PersistenceError
 from .types import (

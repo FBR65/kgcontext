@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from ..types import Document
 
@@ -51,11 +52,11 @@ def parse_file(file_path: str, doc_type: str | None = None) -> Document:
 def _parse_pdf(path: str) -> str:
     import pymupdf
 
-    doc = pymupdf.open(path)
+    pdf_doc: Any = pymupdf.open(path)
     parts: list[str] = []
-    for page in doc:
+    for page in pdf_doc:
         parts.append(page.get_text())
-    doc.close()
+    pdf_doc.close()
     return "\n".join(parts)
 
 
@@ -71,8 +72,9 @@ def _parse_txt(path: str) -> str:
 
 
 def _parse_md(path: str) -> str:
-    import markdown
     from html.parser import HTMLParser
+
+    import markdown
 
     class _TextExtractor(HTMLParser):
         def __init__(self) -> None:

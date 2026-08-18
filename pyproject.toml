@@ -46,10 +46,23 @@ line-length = 100
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
 strict = true
 warn_return_any = true
 warn_unused_configs = true
+ignore_missing_imports = true
+exclude = '''(?x)(
+    \.venv/
+)'''
+
+[[tool.mypy.overrides]]
+module = "kgcontext.types"
+disable_error_code = ["no-untyped-call", "no-any-return"]
+
+[[tool.mypy.overrides]]
+module = "kgcontext.core.parsers"
+disable_error_code = ["no-untyped-call"]
 
 [tool.coverage.run]
 source = ["src/kgcontext"]

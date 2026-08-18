@@ -33,8 +33,17 @@ def mock_llm() -> MockLLMClient:
     """Mock LLM that returns structured extraction results."""
     extraction_response = json.dumps({
         "facts": [
-            {"content": "System supports 500 concurrent users", "evidence": ["The system shall support 500 concurrent users"]},
-            {"content": "Response time under 200ms", "evidence": ["Response time must be under 200ms"]},
+            {
+                "content": "System supports 500 concurrent users",
+                "evidence": [
+                    "Das System kann gleichzeitig von 500 Benutzern "
+                    "genutzt werden, ohne abzustürzen"
+                ],
+            },
+            {
+                "content": "Response time under 200ms",
+                "evidence": ["Die Antwortzeit ist kürzer als der Wimpernschlag eines Menschen"],
+            },
         ],
         "requirements": [
             {"content": "Support 500 concurrent users"},

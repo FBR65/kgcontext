@@ -16,7 +16,7 @@ class GraphValidator:
     def validate(self, kg: KnowledgeGraph) -> ValidationReport:
         issues: list[ValidationIssue] = []
 
-        # Fact without Evidence → WARNING
+        # Fact without Evidence → WARNING (incomprehensible to non-technical reader)
         for fact in kg.facts:
             evidence = kg.get_evidence_for_fact(fact.id)
             if not evidence:
@@ -24,7 +24,7 @@ class GraphValidator:
                     ValidationIssue(
                         level="warning",
                         node_id=fact.id,
-                        message=f"Fact has no supporting evidence: {fact.content[:80]}",
+                        message=f"Fact has no plain-language explanation: {fact.content[:80]}",
                     )
                 )
 

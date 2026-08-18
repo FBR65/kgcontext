@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from .llm import LLMClient
 from ..types import Document, Evidence, Fact, Requirement
+from .llm import LLMClient
 
 
 class ExtractionError(Exception):
@@ -15,14 +15,19 @@ class ExtractionError(Exception):
 
 EXTRACT_PROMPT = """\
 You are a knowledge extraction system. Analyze the following document and extract:
-1. Facts — atomic statements that are stated or derivable from the text.
-2. Evidence — specific excerpts that support each fact.
+1. Facts — atomic technical statements that are stated or derivable from the text.
+2. Evidence — a plain-language explanation of each fact so that a non-technical \
+reader can understand it WITHOUT any domain expertise. Translate jargon, explain \
+implications, give context. This is NOT a quote from the document.
 3. Requirements — obligations or conditions stated in the text.
 
 Return ONLY valid JSON with this structure:
 {{
-  "facts": [{{"content": "...", "evidence": ["excerpt1", "excerpt2"]}}],
-  "requirements": [{{"content": "..."}}]
+  "facts": [{{
+    "content": "technical fact",
+    "evidence": ["plain-language explanation anyone can understand"]
+  }}],
+  "requirements": [{{"content": "requirement"}}]
 }}
 
 Document content:
@@ -42,7 +47,7 @@ class LLMExtractor:
         """Extract structured knowledge from a document.
 
         Returns:
-            dict with keys 'facts' (list of {content, evidence}), 'requirements' (list of {content}).
+            dict with keys 'facts' and 'requirements'.
 
         Raises:
             ExtractionError: If LLM response cannot be parsed.

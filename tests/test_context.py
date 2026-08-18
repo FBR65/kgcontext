@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from kgcontext import KnowledgeGraph, Document
+from kgcontext import Document, KnowledgeGraph
 
 
 class TestContextBuilder:
@@ -104,5 +104,5 @@ class TestContextBuilder:
         prompt = ctx.to_prompt()
         assert "[FACT]" in prompt
         assert "the sky is blue" in prompt
-        assert "Evidence:" in prompt
+        assert "Explanation:" in prompt
         assert "Source:" in prompt

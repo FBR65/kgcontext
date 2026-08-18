@@ -73,7 +73,7 @@ class KnowledgeGraphInternal:
     def find_document_by_path(self, path: str) -> str | None:
         for nid, data in self._graph.nodes(data=True):
             if data.get("node_type") == "document" and data.get("source_path") == path:
-                return nid
+                return str(nid)
         return None
 
     def all_edges(self) -> list[dict[str, Any]]:
@@ -83,10 +83,10 @@ class KnowledgeGraphInternal:
         ]
 
     def node_count(self) -> int:
-        return self._graph.number_of_nodes()
+        return int(self._graph.number_of_nodes())
 
     def edge_count(self) -> int:
-        return self._graph.number_of_edges()
+        return int(self._graph.number_of_edges())
 
     def to_dict(self) -> dict[str, Any]:
         return {

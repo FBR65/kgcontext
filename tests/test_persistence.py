@@ -6,9 +6,10 @@ import json
 from pathlib import Path
 
 import pytest
-from hypothesis import given, settings, HealthCheck, strategies as st
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 
-from kgcontext import KnowledgeGraph, Document, PersistenceError, KGConfig
+from kgcontext import Document, KGConfig, KnowledgeGraph, PersistenceError
 
 
 class TestPersistence:

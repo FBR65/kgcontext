@@ -50,7 +50,7 @@ class Context:
                 excerpt = prov.get("evidence_excerpt", "")
                 parts.append(f"- [FACT] {f.content}")
                 if excerpt:
-                    parts.append(f'  Evidence: "{excerpt}"')
+                    parts.append(f"  Explanation: {excerpt}")
                 parts.append(f"  Source: {doc}")
 
         if self.conflicts:
@@ -67,7 +67,13 @@ class Context:
     def to_messages(self) -> list[dict[str, str]]:
         """Format context as chat messages."""
         return [
-            {"role": "system", "content": "You are a document analysis assistant. Answer based only on the provided context."},
+            {
+                "role": "system",
+                "content": (
+                    "You are a document analysis assistant. "
+                    "Answer based only on the provided context."
+                ),
+            },
             {"role": "user", "content": self.to_prompt()},
         ]
 

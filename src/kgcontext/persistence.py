@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Any
 
 from .config import KGConfig
-from .core.graph import KnowledgeGraphInternal
 from .core.pipeline import KnowledgeGraph
 
 
@@ -30,12 +29,12 @@ def save_graph(kg: KnowledgeGraph, path: str) -> None:
 
         g = kg._internal_graph._graph
         # GraphML doesn't support dict values — serialize them to JSON strings
-        for nid, ndata in g.nodes(data=True):
+        for _nid, ndata in g.nodes(data=True):
             if isinstance(ndata.get("metadata"), dict):
                 ndata["metadata"] = json.dumps(ndata["metadata"])
         nx.write_graphml(g, str(p))
         # Restore dict metadata in the in-memory graph
-        for nid, ndata in g.nodes(data=True):
+        for _nid, ndata in g.nodes(data=True):
             if isinstance(ndata.get("metadata"), str):
                 try:
                     ndata["metadata"] = json.loads(ndata["metadata"])
@@ -70,7 +69,7 @@ def load_graph(path: str) -> KnowledgeGraph:
         # Convert to MultiDiGraph
         mdg = nx.MultiDiGraph(g)
         # Deserialize metadata from JSON strings back to dicts
-        for nid, ndata in mdg.nodes(data=True):
+        for _nid, ndata in mdg.nodes(data=True):
             if isinstance(ndata.get("metadata"), str):
                 try:
                     ndata["metadata"] = json.loads(ndata["metadata"])

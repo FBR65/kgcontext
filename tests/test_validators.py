@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from kgcontext import KnowledgeGraph, Document
+from kgcontext import Document, KnowledgeGraph
 
 
 class TestValidators:
@@ -14,7 +14,7 @@ class TestValidators:
         report = empty_kg.validate()
         assert report.has_warnings
         assert not report.has_errors
-        assert any("no supporting evidence" in i.message for i in report.issues)
+        assert any("plain-language explanation" in i.message for i in report.issues)
 
     def test_fact_with_evidence_no_warning(self, empty_kg: KnowledgeGraph) -> None:
         doc = Document(content="test", source_path="/t.txt", doc_type="txt")
@@ -23,7 +23,7 @@ class TestValidators:
         empty_kg.add_evidence("excerpt", fact_id, doc_id)
 
         report = empty_kg.validate()
-        assert not any("no supporting evidence" in i.message for i in report.issues)
+        assert not any("plain-language explanation" in i.message for i in report.issues)
 
     def test_requirement_without_fact_info(self, empty_kg: KnowledgeGraph) -> None:
         empty_kg.add_requirement("unfulfilled requirement")

@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from kgcontext import KnowledgeGraph, Document, MockLLMClient, ExtractionError
+from kgcontext import Document, ExtractionError, KnowledgeGraph, MockLLMClient
 from kgcontext.core.extractor import LLMExtractor
 
 

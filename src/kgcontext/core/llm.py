@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 
 @runtime_checkable
@@ -26,13 +26,13 @@ class OpenAIClient:
         self._base_url = base_url
         self._model = model
         self._api_key = api_key
-        self._client = None
+        self._client: Any = None
 
     def _get_client(self):  # type: ignore[no-untyped-def]
         if self._client is None:
             from openai import OpenAI
 
-            kwargs: dict = {"model": self._model}
+            kwargs: dict[str, Any] = {"model": self._model}
             if self._base_url:
                 kwargs["base_url"] = self._base_url
             if self._api_key:
@@ -41,7 +41,7 @@ class OpenAIClient:
         return self._client
 
     def complete(self, prompt: str) -> str:
-        client = self._get_client()
+        client = self._get_client()  # type: ignore[no-untyped-call]
         response = client.chat.completions.create(
             model=self._model,
             messages=[{"role": "user", "content": prompt}],
